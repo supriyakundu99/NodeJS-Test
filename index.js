@@ -1,19 +1,50 @@
 const express = require('express')
-const mongoose = require('mongoose')
-const dbURL = "mongodb://localhost/StudentDB"
-
+const mysql = require('mysql')
+const bodyParser = require('body-parser')
 const app = express()
 
-mongoose.connect(dbURL,{useNewUrlParser: true})
-const newConnection = mongoose.connection
+var connection = mysql.createConnection({
+    host: '192.168.0.3',
+    port: 3307,
+    user: 'Supriya',
+    password: 'sk1234',
+    database: 'StudentDB',
 
-newConnection.on('open', () => {
-    console.log("Database Conected......")
 })
+
+connection.connect((err) => {
+    if(!!err){
+        console.log("Database is not connected..."+err)
+    }
+    else{
+        console.log("Database Connected...")
+    }
+})
+
 app.use(express.json())
 
-const studentRouter = require('./routers/students')
-app.use('/student', studentRouter)
+app.get('/students', (req, res) => {
+    connection.query('SELECT * FROM test;', (err, rows, fields) => {
+        if(!err) res.send(rows)
+        else{
+            console.log(err)
+            res.send(err)
+        }
+    })
+})
+
+app.post('/students', (req,res) => {
+    qstring = 'INSERT INTO test (`name`, `city`) VALUES (?,?);'
+    student = req.body
+    connection.query(qstring, [student.name, student.city], (err,rows,fields) => {
+        if(!err) res.send(rows)
+        else{
+            console.log(err)
+            res.send(err)
+        }
+    })
+})
+
 
 app.listen(8000, () => {
     console.log("Server started.....")
