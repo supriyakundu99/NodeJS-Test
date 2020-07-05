@@ -23,7 +23,7 @@ connection.connect((err) => {
 
 app.use(express.json())
 
-app.get('/students', (req, res) => {
+app.get('/students',  async(req, res) => {
     connection.query('SELECT * FROM test;', (err, rows, fields) => {
         if(!err) res.send(rows)
         else{
@@ -33,7 +33,19 @@ app.get('/students', (req, res) => {
     })
 })
 
-app.post('/students', (req,res) => {
+app.get('/students/:id', async(req, res) =>{
+    qstring = 'SELECT * FROM test where (id = ?);'
+    stuid = req.params.id
+    connection.query(qstring, [stuid], (err, rows, fields) => {
+        if(!err) res.send(rows)
+        else{
+            console.log(err)
+            res.send(err);
+        }
+    })
+})
+
+app.post('/students', async(req,res) => {
     qstring = 'INSERT INTO test (`name`, `city`) VALUES (?,?);'
     student = req.body
     connection.query(qstring, [student.name, student.city], (err,rows,fields) => {
@@ -45,6 +57,17 @@ app.post('/students', (req,res) => {
     })
 })
 
+app.delete('/students/:id', async(req, res) =>{
+    qstring = 'DELETE FROM test WHERE (id = ?);'
+    stuid = req.params.id
+    connection.query(qstring, [stuid], (err, rows, fields) => {
+        if(!err) res.send(rows)
+        else{
+            console.log(err)
+            res.send(err);
+        }
+    })
+})
 
 app.listen(8000, () => {
     console.log("Server started.....")
