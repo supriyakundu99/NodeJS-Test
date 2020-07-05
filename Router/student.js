@@ -1,15 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const connection = require('../Database/dbConnection')
+const student = require('../Student/studentOperation')
 
 router.get('/',  async(req, res) => {
-    connection.query('SELECT * FROM test;', (err, rows, fields) => {
-        if(!err) res.send(rows)
-        else{
-            console.log(err)
-            res.send(err)
-        }
-    })
+    result = student.fetchAll(req,res)
 })
 
 router.get('/:id', async(req, res) => {
