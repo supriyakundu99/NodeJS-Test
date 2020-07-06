@@ -1,16 +1,16 @@
 const express = require('express')
 const router = express.Router()
 const connection = require('../Database/dbConnection')
-const student = require('../Source/Student/studentOperation')
+const {fetchAll,fetchUsingID ,insertStudent, updateStudent,deleteStudent} = require('../Source/Student/studentOperation')
 
-router.get('/',  async(req, res) => await student.fetchAll(req,res))
+router.get('/',fetchAll)
 
-router.get('/:id', async(req, res) => await student.fetchUsingID(req, res))
+router.get('/:id',fetchUsingID)
 
-router.post('/', async(req,res) => await student.insertStudent(req,res))
+router.post('/', insertStudent)
 
-router.post('/:id', async(req,res) => await student.updateStudent(req,res))
+router.put('/:id', updateStudent)
 
-router.delete('/:id', async(req, res) => await student.deleteStudent(req, res))
+router.delete('/:id', deleteStudent)
 
 module.exports = router
