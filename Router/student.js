@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const connection = require('../Database/dbConnection')
-const student = require('../Student/studentOperation')
+const student = require('../Source/Student/studentOperation')
 
 router.get('/',  async(req, res) => {
     await student.fetchAll(req,res)
