@@ -4,55 +4,23 @@ const connection = require('../Database/dbConnection')
 const student = require('../Student/studentOperation')
 
 router.get('/',  async(req, res) => {
-    result = student.fetchAll(req,res)
+    await student.fetchAll(req,res)
 })
 
 router.get('/:id', async(req, res) => {
-    qstring = 'SELECT * FROM test where (id = ?);'
-    stuid = req.params.id
-    connection.query(qstring, [stuid], (err, rows, fields) => {
-        if(!err) res.send(rows)
-        else{
-            console.log(err)
-            res.send(err);
-        }
-    })
+    await student.fetchUsingID(req, res)
 })
 
 router.post('/', async(req,res) => {
-    qstring = 'INSERT INTO test (`name`, `city`) VALUES (?,?);'
-    student = req.body
-    connection.query(qstring, [student.name, student.city], (err,rows,fields) => {
-        if(!err) res.send(rows)
-        else{
-            console.log(err)
-            res.send(err)
-        }
-    })
+    await student.insertStudent(req,res)
 })
 
 router.post('/:id', async(req,res) => {
-    qstring = 'UPDATE test SET name = ? , city = ? WHERE (id = ?);'
-    stuid = req.params.id;
-    connection.query(qstring, [req.body.name, req.body.city, stuid], (err, rows, fields) => {
-        if(!err) res.send(rows)
-        else{
-            console.log(err)
-            res.send(err)
-        }
-    })
+    await student.updateStudent(req,res)
 })
 
 router.delete('/:id', async(req, res) =>{
-    qstring = 'DELETE FROM test WHERE (id = ?);'
-    stuid = req.params.id
-    connection.query(qstring, [stuid], (err, rows, fields) => {
-        if(!err) res.send(rows)
-        else{
-            console.log(err)
-            res.send(err);
-        }
-    })
+    await student.deleteStudent(req, res)
 })
 
 module.exports = router
