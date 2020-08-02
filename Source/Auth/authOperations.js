@@ -6,7 +6,6 @@ module.exports = {
 
     "login": function (req, res) {
         console.log("Login called...")
-        console.log("uuid: ", uuid.v4())
         qString = 'SELECT * FROM auth_users where (user_name = ?);'
         qUser = req.body.userName
         connection.query(qString, [qUser], (err, rows, fields) => {
@@ -19,7 +18,19 @@ module.exports = {
                     console.log("Rows: " + rows)
                     let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
                     if (encrpPassword === rows[0].password){
-                        res.send(rows)
+                        qString = 'INSERT INTO session (`user_name`, `session_value`) VALUES (?, ?)'
+                        connection.query(qString, [qUser, uuid.v4()], (session_err, session_rows, session_fields) => {
+                            if(!session_err){
+                                res.send({
+                                    "auth_user": rows[0],
+                                    "session": session_rows
+                                })
+                            }
+                            else{
+                                console.log(session_err)
+                                res.send(session_err)
+                            }
+                        })
                     }
                     else{
                         console.log("Password not matched..")
