@@ -1,12 +1,12 @@
 const connection = require("../../Database/dbConnection");
-const uuID = require('uuid')
+const uuid = require('uuid')
 // const cryptoJS = require('crypto')
 
 module.exports = {
 
     "login": function(req, res){
         console.log("Login called...")
-        console.log("UUID: ",uuID.v4())
+        console.log("uuid: ",uuid.v4())
         qString = 'SELECT * FROM auth_users where (user_name = ?);'
         qUser = req.body.userName
         connection.query(qString, [qUser], (err, rows, fields) => {
@@ -26,7 +26,6 @@ module.exports = {
             }
         })
     }
-
 }
 
 
