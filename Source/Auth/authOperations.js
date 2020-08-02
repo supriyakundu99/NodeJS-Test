@@ -19,8 +19,10 @@ module.exports = {
                     let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
                     if (encrpPassword === rows[0].password){
                         qString = 'INSERT INTO session (`user_name`, `session_value`) VALUES (?, ?)'
-                        connection.query(qString, [qUser, uuid.v4()], (session_err, session_rows, session_fields) => {
+                        sessionID = uuid.v4()
+                        connection.query(qString, [qUser, sessionID], (session_err, session_rows, session_fields) => {
                             if(!session_err){
+                                res.cookie('sessionID', sessionID, {maxAge: 10*24*3600*1000})    
                                 res.send({
                                     "auth_user": rows[0],
                                     "session": session_rows
