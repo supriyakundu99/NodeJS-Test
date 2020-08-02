@@ -32,6 +32,38 @@ module.exports = {
                 res.send(err)
             }
         })
+    },
+
+    "register": function (req, res) {
+        console.log("Register called....")
+        qString = 'SELECT count(user_name) AS user_count FROM auth_users where (user_name = ?);'
+        qUser = req.body.userName
+        connection.query(qString, [qUser], (err, rows, fields) => {
+            if(!err){
+                if(rows[0].user_count == 0){
+                    qString = 'INSERT INTO auth_users (`user_name`, `password`) VALUES (?, ?)'
+                    let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
+                    connection.query(qString, [qUser, encrpPassword], (err, rows, fields) => {
+                        if(!err){
+                            console.log("User registered...")
+                            res.send(rows)
+                        }
+                        else{
+                            console.log(err)
+                            res.send(err)
+                        }
+                    })
+                }
+                else{
+                    console.log("User already exits..")
+                    res.send("User already exits..")
+                }
+            }
+            else {
+                console.log(err)
+                res.send(err)
+            }
+        })
     }
 }
 
@@ -44,5 +76,3 @@ module.exports = {
 //     PRIMARY KEY (users_id),
 //     UNIQUE INDEX users_id_UNIQUE (users_id ASC) VISIBLE,
 //     UNIQUE INDEX user_name_UNIQUE (user_name ASC) VISIBLE);
-
-// INSERT INTO studentdb.auth_users (user_name, password) VALUES ('supriya', '1234');
