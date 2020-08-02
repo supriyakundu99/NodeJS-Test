@@ -18,8 +18,13 @@ module.exports = {
                 else {
                     console.log("Rows: " + rows)
                     let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
-                    console.log("Encrp Password: " + encrpPassword)
-                    res.send(rows)
+                    if (encrpPassword === rows[0].password){
+                        res.send(rows)
+                    }
+                    else{
+                        console.log("Password not matched..")
+                        res.send("Password not matched..")
+                    }
                 }
             }
             else {
