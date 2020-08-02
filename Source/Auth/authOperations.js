@@ -1,12 +1,12 @@
-// import {v4 as uuidv4} from 'uuid'
 const connection = require("../../Database/dbConnection");
-const uuidV4 = require('uuid')
+const uuID = require('uuid')
 // const cryptoJS = require('crypto')
 
 module.exports = {
 
     "login": function(req, res){
         console.log("Login called...")
+        console.log("UUID: ",uuID.v4())
         qString = 'SELECT * FROM auth_users where (user_name = ?);'
         qUser = req.body.userName
         connection.query(qString, [qUser], (err, rows, fields) => {
