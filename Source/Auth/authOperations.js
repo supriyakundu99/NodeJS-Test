@@ -1,6 +1,7 @@
 const connection = require("../../Database/dbConnection");
 const uuid = require('uuid')
 const crypto = require('crypto')
+const cookieParser = require()
 
 module.exports = {
 
@@ -17,24 +18,40 @@ module.exports = {
                 else {
                     console.log("Rows: " + rows)
                     let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
-                    if (encrpPassword === rows[0].password){
+                    if (encrpPassword === rows[0].password) {
+                        // Removing old session
+                        // oldCookie = req.cookies.sessionID
+                        // if(oldCookie != undefined) {
+                        //     qString = 'DELETE FROM session WHERE (session_value = ?);'
+                        //     connection.query(qString, [oldCookie], (del_err, del_rows, del_fields) => {
+                        //         if(!del_err) {
+                        //             console.log("Old cookie deleted..")
+                        //             console.log(del_rows)
+                        //         }
+                        //         else{
+                        //             console.log(del_err)
+                        //         }
+                        //     })
+                        // }  
+
+                        // Creating new session
                         qString = 'INSERT INTO session (`user_name`, `session_value`) VALUES (?, ?)'
-                        sessionID = uuid.v4()
-                        connection.query(qString, [qUser, sessionID], (session_err, session_rows, session_fields) => {
-                            if(!session_err){
-                                res.cookie('sessionID', sessionID, {maxAge: 10*24*3600*1000})    
+                        newSessionID = uuid.v4()
+                        connection.query(qString, [qUser, newSessionID], (session_err, session_rows, session_fields) => {
+                            if (!session_err) {
+                                res.cookie('sessionID', newSessionID, { maxAge: 10 * 24 * 3600 * 1000 })
                                 res.send({
                                     "auth_user": rows[0],
                                     "session": session_rows
                                 })
                             }
-                            else{
+                            else {
                                 console.log(session_err)
                                 res.send(session_err)
                             }
                         })
                     }
-                    else{
+                    else {
                         console.log("Password not matched..")
                         res.send("Password not matched..")
                     }
@@ -52,22 +69,22 @@ module.exports = {
         qString = 'SELECT count(user_name) AS user_count FROM auth_users where (user_name = ?);'
         qUser = req.body.userName
         connection.query(qString, [qUser], (err, rows, fields) => {
-            if(!err){
-                if(rows[0].user_count == 0){
+            if (!err) {
+                if (rows[0].user_count == 0) {
                     qString = 'INSERT INTO auth_users (`user_name`, `password`) VALUES (?, ?)'
                     let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
                     connection.query(qString, [qUser, encrpPassword], (err, rows, fields) => {
-                        if(!err){
+                        if (!err) {
                             console.log("User registered...")
                             res.send(rows)
                         }
-                        else{
+                        else {
                             console.log(err)
                             res.send(err)
                         }
                     })
                 }
-                else{
+                else {
                     console.log("User already exits..")
                     res.send("User already exits..")
                 }
