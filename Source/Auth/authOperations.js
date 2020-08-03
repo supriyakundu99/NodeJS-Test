@@ -1,38 +1,38 @@
 const connection = require("../../Database/dbConnection");
 const uuid = require('uuid')
 const crypto = require('crypto')
-const cookieParser = require()
 
 module.exports = {
 
     "login": function (req, res) {
         console.log("Login called...")
         qString = 'SELECT * FROM auth_users where (user_name = ?);'
-        qUser = req.body.userName
+        // qUser = req.body.userName
+        let qUser = 'supriya'
         connection.query(qString, [qUser], (err, rows, fields) => {
             if (!err) {
                 if (rows.length == 0) {
-                    console.log("Rows: " + rows)
+                    console.log("Rows: ",rows)
                     res.send("No user found")
                 }
                 else {
                     console.log("Rows: " + rows)
-                    let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
+                    let encrpPassword = crypto.createHash('sha1').update("1234").digest('hex')
                     if (encrpPassword === rows[0].password) {
                         // Removing old session
-                        // oldCookie = req.cookies.sessionID
-                        // if(oldCookie != undefined) {
-                        //     qString = 'DELETE FROM session WHERE (session_value = ?);'
-                        //     connection.query(qString, [oldCookie], (del_err, del_rows, del_fields) => {
-                        //         if(!del_err) {
-                        //             console.log("Old cookie deleted..")
-                        //             console.log(del_rows)
-                        //         }
-                        //         else{
-                        //             console.log(del_err)
-                        //         }
-                        //     })
-                        // }  
+                        oldCookie = req.cookies.sessionID
+                        if(oldCookie != undefined) {
+                            qString = 'DELETE FROM session WHERE (session_value = ?);'
+                            connection.query(qString, [oldCookie], (del_err, del_rows, del_fields) => {
+                                if(!del_err) {
+                                    console.log("Old cookie deleted..")
+                                    console.log(del_rows)
+                                }
+                                else{
+                                    console.log(del_err)
+                                }
+                            })
+                        }  
 
                         // Creating new session
                         qString = 'INSERT INTO session (`user_name`, `session_value`) VALUES (?, ?)'
