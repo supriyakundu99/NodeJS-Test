@@ -7,8 +7,8 @@ module.exports = {
     "login": function (req, res) {
         console.log("Login called...")
         qString = 'SELECT * FROM auth_users where (user_name = ?);'
-        // qUser = req.body.userName
-        let qUser = 'supriya'
+        qUser = req.body.userName
+        // let qUser = 'supriya'
         connection.query(qString, [qUser], (err, rows, fields) => {
             if (!err) {
                 if (rows.length == 0) {
@@ -17,7 +17,8 @@ module.exports = {
                 }
                 else {
                     console.log("Rows: " + rows)
-                    let encrpPassword = crypto.createHash('sha1').update("1234").digest('hex')
+                    let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
+                    // let encrpPassword = crypto.createHash('sha1').update("1234").digest('hex')
                     if (encrpPassword === rows[0].password) {
                         // Removing old session
                         oldCookie = req.cookies.sessionID
