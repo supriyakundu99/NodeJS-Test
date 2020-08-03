@@ -6,8 +6,8 @@ module.exports = {
 
     "login": function (req, res) {
         console.log("Login called...")
-        qString = 'SELECT * FROM auth_users where (user_name = ?);'
-        qUser = req.body.userName
+        let qString = 'SELECT * FROM auth_users where (user_name = ?);'
+        let qUser = req.body.userName
         // let qUser = 'supriya'
         connection.query(qString, [qUser], (err, rows, fields) => {
             if (!err) {
@@ -23,7 +23,7 @@ module.exports = {
                         // Removing old session
                         oldCookie = req.cookies.sessionID
                         if(oldCookie != undefined) {
-                            qString = 'DELETE FROM session WHERE (session_value = ?);'
+                            let qString = 'DELETE FROM session WHERE (session_value = ?);'
                             connection.query(qString, [oldCookie], (del_err, del_rows, del_fields) => {
                                 if(!del_err) {
                                     console.log("Old cookie deleted..")
@@ -36,7 +36,7 @@ module.exports = {
                         }  
 
                         // Creating new session
-                        qString = 'INSERT INTO session (`user_name`, `session_value`) VALUES (?, ?)'
+                        let qString = 'INSERT INTO session (`user_name`, `session_value`) VALUES (?, ?)'
                         newSessionID = uuid.v4()
                         connection.query(qString, [qUser, newSessionID], (session_err, session_rows, session_fields) => {
                             if (!session_err) {
@@ -67,12 +67,12 @@ module.exports = {
 
     "register": function (req, res) {
         console.log("Register called....")
-        qString = 'SELECT count(user_name) AS user_count FROM auth_users where (user_name = ?);'
-        qUser = req.body.userName
+        let qString = 'SELECT count(user_name) AS user_count FROM auth_users where (user_name = ?);'
+        let qUser = req.body.userName
         connection.query(qString, [qUser], (err, rows, fields) => {
             if (!err) {
                 if (rows[0].user_count == 0) {
-                    qString = 'INSERT INTO auth_users (`user_name`, `password`) VALUES (?, ?)'
+                    let qString = 'INSERT INTO auth_users (`user_name`, `password`) VALUES (?, ?)'
                     let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
                     connection.query(qString, [qUser, encrpPassword], (err, rows, fields) => {
                         if (!err) {
