@@ -109,8 +109,12 @@ module.exports = {
             let sessionID = req.cookies.sessionID
             if(sessionID != undefined){
                 resultObj.is_authenticated = true
-                
-                resolve(resultObj)
+                console.log(sessionID)
+                let qString = 'SELECT user_name FROM session WHERE (session_value = ?);'
+                connection.query(qString, [sessionID], (err, rows, fields) => {
+                    resultObj.userName = rows[0].user_name
+                    resolve(resultObj)
+                })
             }
             else{
                 resolve(resultObj)
