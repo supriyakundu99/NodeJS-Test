@@ -1,6 +1,8 @@
 const connection = require("../../Database/dbConnection");
 const uuid = require('uuid')
-const crypto = require('crypto')
+const crypto = require('crypto');
+const { resolve } = require("path");
+const { rejects } = require("assert");
 
 module.exports = {
 
@@ -21,7 +23,7 @@ module.exports = {
                     // let encrpPassword = crypto.createHash('sha1').update("1234").digest('hex')
                     if (encrpPassword === rows[0].password) {
                         // Removing old session
-                        oldCookie = req.cookies.sessionID
+                        let oldCookie = req.cookies.sessionID
                         if(oldCookie != undefined) {
                             let qString = 'DELETE FROM session WHERE (session_value = ?);'
                             connection.query(qString, [oldCookie], (del_err, del_rows, del_fields) => {
@@ -93,6 +95,25 @@ module.exports = {
             else {
                 console.log(err)
                 res.send(err)
+            }
+        })
+    },
+
+    "authenticatedUser": function(req) {
+        console.log("is_authenticated called..")
+        return new Promise((resolve, reject) => {
+            let resultObj = {
+                "is_authenticated": false,
+                "userName": null
+            }
+            let sessionID = req.cookies.sessionID
+            if(sessionID != undefined){
+                resultObj.is_authenticated = true
+                
+                resolve(resultObj)
+            }
+            else{
+                resolve(resultObj)
             }
         })
     }
