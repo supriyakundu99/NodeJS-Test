@@ -3,15 +3,18 @@ const {authenticatedUser} = require('../Auth/authOperations')
 const path = require('path')
 
 module.exports = {
-    "renderHomePage": function (req, res){
+    renderHomePage: function (req, res){
+        res.sendFile('home.html', {root: path.join(__dirname,'Page')})
+    },
+
+    fetchUserDetails: function (req, res) {
         authenticatedUser(req).then((data) => {
             console.log(data)
             if(data.is_authenticated){
-                res.sendFile('home.html', {root: path.join(__dirname,'Page')})
-                // res.send("Home Page <br>Wellcome "+data.userName)
+                res.json(data)
             }
             else{
-                res.send("Home Page") 
+                res.json(data) 
             }
         })
     }
