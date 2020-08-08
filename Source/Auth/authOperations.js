@@ -6,7 +6,7 @@ const { rejects } = require("assert");
 
 module.exports = {
 
-    "login": function (req, res) {
+    login: function (req, res) {
         console.log("Login called...")
         let qString = 'SELECT * FROM auth_users where (user_name = ?);'
         let qUser = req.body.userName
@@ -67,7 +67,7 @@ module.exports = {
         })
     },
 
-    "register": function (req, res) {
+    register: function (req, res) {
         console.log("Register called....")
         let qString = 'SELECT count(user_name) AS user_count FROM auth_users where (user_name = ?);'
         let qUser = req.body.userName
@@ -99,7 +99,7 @@ module.exports = {
         })
     },
 
-    "authenticatedUser": function(req) {
+    authenticatedUser: function(req) {
         console.log("is_authenticated called..")
         return new Promise((resolve, reject) => {
             let resultObj = {
