@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="/staticFiles/JS/loginDataSend.js"></script> -->
+    <script src="/staticFiles/JS/loginDataSend.js"></script>
     <title>Login</title>
 </head>
 <body>
     <h1>Login Page:</h1>
-    <form method="POST" action="login">
+    <form method="POST" action="" onsubmit="doLogin(); return false;">
         <label>Username: </label>
         <input type="text" id="userName", name="userName">
 
