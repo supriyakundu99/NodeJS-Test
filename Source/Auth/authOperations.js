@@ -1,10 +1,15 @@
 const connection = require("../../Database/dbConnection");
 const uuid = require('uuid')
 const crypto = require('crypto');
-const { resolve } = require("path");
-const { rejects } = require("assert");
+const path = require('path')
+// const { resolve } = require("path");
+// const { rejects } = require("assert");
 
 module.exports = {
+
+    renderLoginPage: function(req, res) {
+        res.sendFile('login.html', {root: path.join(__dirname,'Page')})
+    },
 
     login: function (req, res) {
         console.log("Login called...")
@@ -65,6 +70,10 @@ module.exports = {
                 res.send(err)
             }
         })
+    },
+
+    renderRegisterPage: function(req, res) {
+        res.sendFile('register.html', {root: path.join(__dirname,'Page')})
     },
 
     register: function (req, res) {
