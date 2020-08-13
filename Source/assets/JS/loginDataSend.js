@@ -1,5 +1,7 @@
 function doLogin(){
     console.log("DoLogin called....")
+    let msgEle = document.getElementById("msg")
+
     $.ajax({
         type: "POST",
         url: "/account/login",
@@ -11,11 +13,13 @@ function doLogin(){
             console.log("success.....")
             console.log(res)
             if(res.loginSuccess){
-                document.getElementById("success").innerHTML = res.message
+                msgEle.setAttribute("style", "color: green;")
+                msgEle.innerHTML = res.message
                 location.replace('/')
             }
             else{
-                document.getElementById("failure").innerHTML = res.message
+                msgEle.setAttribute("style", "color: red;")
+                msgEle.innerHTML = res.message
             }
         },
         error: function (res) {
