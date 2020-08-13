@@ -13,6 +13,10 @@ module.exports = {
 
     login: function (req, res) {
         console.log("Login called...")
+        let resData = {
+            "loginSuccess": false,
+            "message": ""
+        }
         let qString = 'SELECT * FROM auth_users where (user_name = ?);'
         let qUser = req.body.userName
         // let qUser = 'supriya'
@@ -20,7 +24,8 @@ module.exports = {
             if (!err) {
                 if (rows.length == 0) {
                     console.log("Rows: ",rows)
-                    res.send("No user found")
+                    resData.message = "No user found...."
+                    res.json(resData)
                 }
                 else {
                     console.log("Rows: " + rows)
@@ -48,26 +53,28 @@ module.exports = {
                         connection.query(qString, [qUser, newSessionID], (session_err, session_rows, session_fields) => {
                             if (!session_err) {
                                 res.cookie('sessionID', newSessionID, { maxAge: 10 * 24 * 3600 * 1000 })
-                                res.send({
-                                    "auth_user": rows[0],
-                                    "session": session_rows
-                                })
+                                resData.loginSuccess = true
+                                resData.message = "Login successfully done...."
+                                res.json(resData)
                             }
                             else {
                                 console.log(session_err)
-                                res.send(session_err)
+                                resData.message = session_err
+                                res.json(resData)
                             }
                         })
                     }
                     else {
                         console.log("Password not matched..")
-                        res.send("Password not matched..")
+                        resData.message = "Password not matched..."
+                        res.json(resData)
                     }
                 }
             }
             else {
                 console.log(err)
-                res.send(err)
+                resData.message = err
+                res.json(resData)
             }
         })
     },
