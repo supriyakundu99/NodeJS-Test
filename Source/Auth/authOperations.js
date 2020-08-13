@@ -85,34 +85,49 @@ module.exports = {
 
     register: function (req, res) {
         console.log("Register called....")
-        let qString = 'SELECT count(user_name) AS user_count FROM auth_users where (user_name = ?);'
-        let qUser = req.body.userName
-        connection.query(qString, [qUser], (err, rows, fields) => {
-            if (!err) {
-                if (rows[0].user_count == 0) {
-                    let qString = 'INSERT INTO auth_users (`user_name`, `password`) VALUES (?, ?)'
-                    let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
-                    connection.query(qString, [qUser, encrpPassword], (err, rows, fields) => {
-                        if (!err) {
-                            console.log("User registered...")
-                            res.send(rows)
-                        }
-                        else {
-                            console.log(err)
-                            res.send(err)
-                        }
-                    })
+        let resData = {
+            "registerSuccess": false,
+            "message": ""
+        }
+        if(req.body.password === req.body.cnfPassword){
+            let qString = 'SELECT count(user_name) AS user_count FROM auth_users where (user_name = ?);'
+            let qUser = req.body.userName
+            connection.query(qString, [qUser], (err, rows, fields) => {
+                if (!err) {
+                    if (rows[0].user_count == 0) {
+                        let qString = 'INSERT INTO auth_users (`user_name`, `password`) VALUES (?, ?)'
+                        let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
+                        connection.query(qString, [qUser, encrpPassword], (err, rows, fields) => {
+                            if (!err) {
+                                console.log("User registered...")
+                                resData.registerSuccess = true
+                                resData.message = "User registered..."
+                                res.json(resData)
+                            }
+                            else {
+                                console.log(err)
+                                resData.message = err
+                                res.json(resData)
+                            }
+                        })
+                    }
+                    else {
+                        console.log("User already exits..")
+                        resData.message = "User already exists.."
+                        res.json(resData)
+                    }
                 }
                 else {
-                    console.log("User already exits..")
-                    res.send("User already exits..")
+                    console.log(err)
+                    resData.message = err
+                    res.json(resData)
                 }
-            }
-            else {
-                console.log(err)
-                res.send(err)
-            }
-        })
+            })
+        }
+        else{
+            resData.message = "Two passwords are not same.."
+            res.json(resData)
+        }
     },
 
     authenticatedUser: function(req) {

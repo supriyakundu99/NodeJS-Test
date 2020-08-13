@@ -11,6 +11,7 @@ function doLogin(){
             console.log("success.....")
             console.log(res)
             if(res.loginSuccess){
+                document.getElementById("success").innerHTML = res.message
                 location.replace('/')
             }
             else{
