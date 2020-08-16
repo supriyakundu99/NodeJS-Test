@@ -155,7 +155,7 @@ module.exports = {
 }
 
 
-// Table create
+// Auth_user Table create
 // CREATE TABLE studentdb.auth_users (
 //     users_id INT NOT NULL AUTO_INCREMENT,
 //     user_name VARCHAR(50) NULL,
