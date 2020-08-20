@@ -1,7 +1,7 @@
-function doRegister(){
+function doRegister() {
     console.log("DoRegister called....")
     let msgEle = document.getElementById("msg")
-    
+
     $.ajax({
         type: "POST",
         url: "/account/register",
@@ -13,12 +13,12 @@ function doRegister(){
         success: (res) => {
             console.log("success.....");
             console.log(res)
-            if(res.registerSuccess){
+            if (res.registerSuccess) {
                 msgEle.setAttribute("style", "color: green;")
                 msgEle.innerHTML = res.message
                 location.replace('/account/login')
             }
-            else{
+            else {
                 msgEle.setAttribute("style", "color: red;")
                 msgEle.innerHTML = res.message
             }

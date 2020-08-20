@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {login, register, renderLoginPage, renderRegisterPage} = require('../Source/Auth/authOperations')
+const { login, register, renderLoginPage, renderRegisterPage } = require('../Source/Auth/authOperations')
 
 
 router.get('/login', renderLoginPage)

@@ -6,7 +6,7 @@ function fetchUser() {
         success: (res) => {
             console.log("success.....");
             console.log(res)
-            if(res.is_authenticated) {
+            if (res.is_authenticated) {
                 document.getElementById("user").innerHTML = res.userName
             }
         },

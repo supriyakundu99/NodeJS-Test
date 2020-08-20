@@ -1,4 +1,4 @@
-function doLogin(){
+function doLogin() {
     console.log("DoLogin called....")
     let msgEle = document.getElementById("msg")
 
@@ -12,12 +12,12 @@ function doLogin(){
         success: (res) => {
             console.log("success.....")
             console.log(res)
-            if(res.loginSuccess){
+            if (res.loginSuccess) {
                 msgEle.setAttribute("style", "color: green;")
                 msgEle.innerHTML = res.message
                 location.replace('/')
             }
-            else{
+            else {
                 msgEle.setAttribute("style", "color: red;")
                 msgEle.innerHTML = res.message
             }

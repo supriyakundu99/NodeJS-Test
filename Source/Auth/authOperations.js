@@ -7,8 +7,8 @@ const path = require('path')
 
 module.exports = {
 
-    renderLoginPage: function(req, res) {
-        res.sendFile('login.html', {root: path.join(__dirname,'Page')})
+    renderLoginPage: function (req, res) {
+        res.sendFile('login.html', { root: path.join(__dirname, 'Page') })
     },
 
     login: function (req, res) {
@@ -23,7 +23,7 @@ module.exports = {
         connection.query(qString, [qUser], (err, rows, fields) => {
             if (!err) {
                 if (rows.length == 0) {
-                    console.log("Rows: ",rows)
+                    console.log("Rows: ", rows)
                     resData.message = "No user found...."
                     res.json(resData)
                 }
@@ -34,18 +34,18 @@ module.exports = {
                     if (encrpPassword === rows[0].password) {
                         // Removing old session
                         let oldCookie = req.cookies.sessionID
-                        if(oldCookie != undefined) {
+                        if (oldCookie != undefined) {
                             let qString = 'DELETE FROM session WHERE (session_value = ?);'
                             connection.query(qString, [oldCookie], (del_err, del_rows, del_fields) => {
-                                if(!del_err) {
+                                if (!del_err) {
                                     console.log("Old cookie deleted..")
                                     console.log(del_rows)
                                 }
-                                else{
+                                else {
                                     console.log(del_err)
                                 }
                             })
-                        }  
+                        }
 
                         // Creating new session
                         let qString = 'INSERT INTO session (`user_name`, `session_value`) VALUES (?, ?)'
@@ -79,8 +79,8 @@ module.exports = {
         })
     },
 
-    renderRegisterPage: function(req, res) {
-        res.sendFile('register.html', {root: path.join(__dirname,'Page')})
+    renderRegisterPage: function (req, res) {
+        res.sendFile('register.html', { root: path.join(__dirname, 'Page') })
     },
 
     register: function (req, res) {
@@ -89,7 +89,7 @@ module.exports = {
             "registerSuccess": false,
             "message": ""
         }
-        if(req.body.password === req.body.cnfPassword){
+        if (req.body.password === req.body.cnfPassword) {
             let qString = 'SELECT count(user_name) AS user_count FROM auth_users where (user_name = ?);'
             let qUser = req.body.userName
             connection.query(qString, [qUser], (err, rows, fields) => {
@@ -124,13 +124,13 @@ module.exports = {
                 }
             })
         }
-        else{
+        else {
             resData.message = "Two passwords are not same.."
             res.json(resData)
         }
     },
 
-    authenticatedUser: function(req) {
+    authenticatedUser: function (req) {
         console.log("is_authenticated called..")
         return new Promise((resolve, reject) => {
             let resultObj = {
@@ -138,7 +138,7 @@ module.exports = {
                 "userName": null
             }
             let sessionID = req.cookies.sessionID
-            if(sessionID != undefined){
+            if (sessionID != undefined) {
                 resultObj.is_authenticated = true
                 console.log(sessionID)
                 let qString = 'SELECT user_name FROM session WHERE (session_value = ?);'
@@ -147,7 +147,7 @@ module.exports = {
                     resolve(resultObj)
                 })
             }
-            else{
+            else {
                 resolve(resultObj)
             }
         })
