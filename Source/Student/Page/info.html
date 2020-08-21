@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="/staticFiles/JS/getCSRF.js"></script>
+    <title>Student Info</title>
+</head>
+
+<body>
+    <h1>Student Info</h1>
+    <form method="POST" action="" onsubmit="doLogin(); return false;">
+        <input type="text" id="csrf_token" name="csrf_token" value="na" hidden>
+        <script>getCSRF_Token()</script>
+
+        <br><label>Name: </label>
+        <input type="text" name="stuName" id="stuName">
+
+        <br><label>Class: </label>
+        <input type="text" name="class" id="class">
+
+        <br><label>Stream: </label>
+        <input type="text" name="stream" id="stream">
+
+        <br><input type="submit" value="submit">
+    </form>
+</body>
+
+</html>

@@ -5,7 +5,7 @@ const studentRouter = require('./student')
 const accountsRouter = require('./accounts')
 
 router.use('/', homeRouter)
-router.use('/students', studentRouter)
+router.use('/student', studentRouter)
 router.use('/account', accountsRouter)
 
 module.exports = router
