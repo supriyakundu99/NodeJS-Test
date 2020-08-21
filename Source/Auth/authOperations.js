@@ -1,9 +1,8 @@
-const connection = require("../../Database/dbConnection");
+const connection = require("../../Database/dbConnection")
 const uuid = require('uuid')
-const crypto = require('crypto');
+const crypto = require('crypto')
 const path = require('path')
-// const { resolve } = require("path");
-// const { rejects } = require("assert");
+const { generateCSRF } = require('./securityOperations')
 
 module.exports = {
 
@@ -95,9 +94,11 @@ module.exports = {
             connection.query(qString, [qUser], (err, rows, fields) => {
                 if (!err) {
                     if (rows[0].user_count == 0) {
-                        let qString = 'INSERT INTO auth_users (`user_name`, `password`) VALUES (?, ?)'
+                        let qString = 'INSERT INTO auth_users (`user_name`, `password`, `csrf_key`) VALUES (?, ?, ?)'
                         let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
-                        connection.query(qString, [qUser, encrpPassword], (err, rows, fields) => {
+                        let csrfKey = generateCSRF(qUser)
+                        console.log("----CSRF at auth: ", csrfKey)
+                        connection.query(qString, [qUser, encrpPassword, csrfKey], (err, rows, fields) => {
                             if (!err) {
                                 console.log("User registered...")
                                 resData.registerSuccess = true
@@ -139,11 +140,14 @@ module.exports = {
             }
             let sessionID = req.cookies.sessionID
             if (sessionID != undefined) {
-                resultObj.is_authenticated = true
                 console.log(sessionID)
                 let qString = 'SELECT user_name FROM session WHERE (session_value = ?);'
                 connection.query(qString, [sessionID], (err, rows, fields) => {
-                    resultObj.userName = rows[0].user_name
+                    console.log("Rows-------------", rows.length)
+                    if (rows.length > 0) {
+                        resultObj.is_authenticated = true
+                        resultObj.userName = rows[0].user_name
+                    }
                     resolve(resultObj)
                 })
             }
