@@ -1,0 +1,9 @@
+// For format on save
+{
+    "[sql]": {
+        "editor.formatOnSave": false
+    },
+    // "[javascript]": {
+    //     "editor.formatOnSave": true
+    // },
+}
