@@ -1,6 +1,7 @@
 const randomString = require('randomstring')
 const random = require('random')
 const crypto = require('crypto')
+const { authenticatedUser } = require('../Auth/authOperations')
 
 module.exports = {
 
@@ -19,5 +20,17 @@ module.exports = {
             + randStr.slice(randArr[2], 216) + encrpUser.slice(30, 40)
         )
         return csrf_key
+    },
+
+    deliverToken: function (req, res) {
+        authenticatedUser(req).then((data) => {
+            console.log(data)
+            if (data.is_authenticated) {
+                res.json(data)
+            }
+            else {
+                res.json({ "csrfToken": null })
+            }
+        })
     }
 }
