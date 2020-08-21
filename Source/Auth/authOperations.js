@@ -155,5 +155,5 @@ module.exports = {
                 resolve(resultObj)
             }
         })
-    }
+    },
 }
