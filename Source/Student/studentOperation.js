@@ -1,10 +1,34 @@
 const connection = require("../../Database/dbConnection");
+const { authenticatedUser } = require("../Auth/authOperations")
 const path = require('path')
 
 module.exports = {
     renderInfoPage: function (req, res) {
         res.sendFile('info.html', { root: path.join(__dirname, 'Page') })
     },
+
+    manageInfo: function (req, res) {
+        let csrfval = true
+        let resobj = {
+            "infoInsert": false,
+            "csrf_validation": false,
+            "authentication": false
+        }
+        if (csrfval) {
+            resobj.csrf_validation = true
+            authenticatedUser(req, res).then((data) => {
+                if (data.is_authenticated) {
+                    resobj.authentication = true
+                }
+                else {
+                    res.json(resobj)
+                }
+            })
+        }
+        else {
+            res.json(resobj)
+        }
+    }
 
     // fetchAll: function (req, res) {
     //     connection.query("SELECT * FROM test;", (err, rows, fields) => {
