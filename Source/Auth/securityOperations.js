@@ -7,7 +7,7 @@ module.exports = {
         authenticatedUser(req).then((data) => {
             console.log(data)
             if (data.is_authenticated) {
-                qString = 'SELECT csrf_key FROM auth_users WHERE (user_name = ?)'
+                let qString = 'SELECT csrf_key FROM auth_users WHERE (user_name = ?)'
                 connection.query(qString, [data.userName], (err, rows, fields) => {
                     if (!err) {
                         let start = random.int(0, 192)
@@ -36,12 +36,44 @@ module.exports = {
                 "valid_user": null,
                 "message": " "
             }
+            if (req.body.csrfToken) {
+                let csrfToken = req.body.csrfToken
+                if (csrfToken.length == 64) {
+                    authenticatedUser(req).then((data) => {
+                        if (data.is_authenticated) {
+                            csrf_validation_result.valid_user = data.userName
+                            let qString = 'SELECT csrf_key FROM auth_users WHERE (user_name = ?)'
+                            connection.query(qString, [data.userName], (err, rows, fields) => {
+                                if (!err) {
+                                    if (rows[0].csrf_key.includes(csrfToken)) {
+                                        csrf_validation_result.isCSRF_valid = true
+                                        csrf_validation_result.message = "CSRF Validation success....."
+                                        resolve(csrf_validation_result)
 
-            csrf_validation_result.isCSRF_valid = true
-            csrf_validation_result.valid_user = "riju"
-            csrf_validation_result.message = "Success"
-            resolve(csrf_validation_result)
+                                    }
+                                }
+                                else {
+                                    console.log(err)
+                                    csrf_validation_result.message = "DB operation error...."
+                                    resolve(csrf_validation_result)
+                                }
+                            })
+                        }
+                        else {
+                            csrf_validation_result.message = "No auth user found..."
+                            resolve(csrf_validation_result)
+                        }
+                    })
+                }
+                else {
+                    csrf_validation_result.message = "CSRF token is not matched..."
+                    resolve(csrf_validation_result)
+                }
+            }
+            else {
+                csrf_validation_result.message = "No CSRF token in post request..."
+                resolve(csrf_validation_result)
+            }
         })
-
     }
 }

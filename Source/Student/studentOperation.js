@@ -67,7 +67,7 @@ module.exports = {
                 }
             }
             else {
-                resobj.message("CSRF validation error...")
+                resobj.message = "CSRF validation error..."
                 res.json(resobj)
             }
         })
