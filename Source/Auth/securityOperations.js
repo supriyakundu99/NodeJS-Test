@@ -49,7 +49,6 @@ module.exports = {
                                         csrf_validation_result.isCSRF_valid = true
                                         csrf_validation_result.message = "CSRF Validation success....."
                                         resolve(csrf_validation_result)
-
                                     }
                                 }
                                 else {
