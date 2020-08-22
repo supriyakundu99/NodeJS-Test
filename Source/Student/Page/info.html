@@ -7,12 +7,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="/staticFiles/JS/getCSRF.js"></script>
+    <script src="/staticFiles/JS/manageInfo.js"></script>
+
     <title>Student Info</title>
 </head>
 
 <body>
     <h1>Student Info</h1>
-    <form method="POST" action="" onsubmit="doLogin(); return false;">
+    <form method="POST" action="" onsubmit="manageStudentInfo(); return false;">
         <input type="text" id="csrfToken" name="csrfToken" value="na" hidden>
         <script>getCSRF_Token()</script>
 

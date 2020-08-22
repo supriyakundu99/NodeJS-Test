@@ -24,7 +24,7 @@ module.exports = {
                     let qUser = data.valid_user
                     connection.query(qString, [qUser], (errCnt, rowsCnt, fieldsCnt) => {
                         if (!errCnt) {
-                            if (rows[0].user_count == 0) {
+                            if (rowsCnt[0].user_count == 0) {
                                 qString = 'INSERT INTO `studentdb`.`student_info` (`user_name`, `name`, `class`, `stream`) VALUES (?,?,?,?);'
                                 connection.query(qString, [qUser, req.body.stuName, req.body.class, req.body.stream], (err, rows, fields) => {
                                     if (!err) {
