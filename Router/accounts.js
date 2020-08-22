@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { login, register, renderLoginPage, renderRegisterPage } = require('../Source/Auth/authOperations')
-const { deliverToken } = require('../Source/Auth/csrfTokenDeliver')
+const { deliverToken } = require('../Source/Auth/securityOperations')
 
 router.get('/login', renderLoginPage)
 router.post('/login', login)

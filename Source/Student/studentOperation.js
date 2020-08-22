@@ -1,6 +1,7 @@
 const connection = require("../../Database/dbConnection");
-const { authenticatedUser } = require("../Auth/authOperations")
 const path = require('path')
+const { authenticatedUser } = require("../Auth/authOperations")
+const { validateCSRF } = require('../Auth/securityOperations')
 
 module.exports = {
     renderInfoPage: function (req, res) {
@@ -12,22 +13,64 @@ module.exports = {
         let resobj = {
             "infoInsert": false,
             "csrf_validation": false,
-            "authentication": false
+            "message": " "
         }
-        if (csrfval) {
-            resobj.csrf_validation = true
-            authenticatedUser(req, res).then((data) => {
-                if (data.is_authenticated) {
-                    resobj.authentication = true
+        validateCSRF(req).then((data) => {
+            console.log(data);
+            if (data.isCSRF_valid) {
+                resobj.csrf_validation = true
+                if (data.valid_user) {
+                    let qString = 'SELECT count(user_name) AS user_count FROM student_info where (user_name = ?);'
+                    let qUser = data.valid_user
+                    connection.query(qString, [qUser], (errCnt, rowsCnt, fieldsCnt) => {
+                        if (!errCnt) {
+                            if (rows[0].user_count == 0) {
+                                qString = 'INSERT INTO `studentdb`.`student_info` (`user_name`, `name`, `class`, `stream`) VALUES (?,?,?,?);'
+                                connection.query(qString, [qUser, req.body.stuName, req.body.class, req.body.stream], (err, rows, fields) => {
+                                    if (!err) {
+                                        resobj.infoInsert = true
+                                        resobj.message = "Info insertion success..."
+                                        res.json(resobj)
+                                    }
+                                    else {
+                                        console.log(err)
+                                        resobj.message("Info insertion error...")
+                                        res.json(resobj)
+                                    }
+                                })
+                            }
+                            else {
+                                qString = 'UPDATE `studentdb`.`student_info` SET `name` = ?, `class` = ?, `stream` = ? WHERE (`user_name` = ?);'
+                                connection.query(qString, [req.body.stuName, req.body.class, req.body.stream, qUser], (err, rows, fields) => {
+                                    if (!err) {
+                                        resobj.infoInsert = true
+                                        resobj.message = "Info updation success..."
+                                        res.json(resobj)
+                                    }
+                                    else {
+                                        console.log(err)
+                                        resobj.message("Info updation error...")
+                                        res.json(resobj)
+                                    }
+                                })
+                            }
+                        }
+                        else {
+                            resobj.message("Error in row count...")
+                            res.json(resobj)
+                        }
+                    })
                 }
                 else {
+                    resobj.message("User not found....")
                     res.json(resobj)
                 }
-            })
-        }
-        else {
-            res.json(resobj)
-        }
+            }
+            else {
+                resobj.message("CSRF validation error...")
+                res.json(resobj)
+            }
+        })
     }
 
     // fetchAll: function (req, res) {

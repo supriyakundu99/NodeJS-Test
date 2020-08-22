@@ -2,7 +2,7 @@ const connection = require("../../Database/dbConnection")
 const uuid = require('uuid')
 const crypto = require('crypto')
 const path = require('path')
-const { generateCSRF } = require('./securityOperations')
+const { generateCSRF } = require('./generateCSRF_Key')
 
 module.exports = {
 
