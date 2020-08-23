@@ -48,6 +48,27 @@ module.exports = {
                                     if (rows[0].csrf_key.includes(csrfToken)) {
                                         csrf_validation_result.isCSRF_valid = true
                                         csrf_validation_result.message = "CSRF Validation success....."
+                                        let new_Temp_token = csrfToken[63] + csrfToken.slice(1, 63) + csrfToken[0]
+                                        let new_csrf_key = rows[0].csrf_key.replace(csrfToken, new_Temp_token)
+                                        console.log("-------------------------")
+                                        console.log(csrfToken, csrfToken.length)
+                                        console.log(new_Temp_token, new_Temp_token.length)
+                                        console.log(rows[0].csrf_key === new_csrf_key)
+                                        console.log(new_csrf_key, new_csrf_key.length)
+                                        console.log("-------------------------")
+                                        let tempQString = 'UPDATE `studentdb`.`auth_users` SET `csrf_key` = ? WHERE (`user_name` = ?);'
+                                        connection.query(tempQString, [new_csrf_key, data.userName], (tmpErr, tmpRow, tmpFields) => {
+                                            if (!tmpErr) {
+                                                console.log("New CSRF Key updated")
+                                            }
+                                            else {
+                                                console.log("CSRF Key can not be updated")
+                                            }
+                                        })
+                                        resolve(csrf_validation_result)
+                                    }
+                                    else {
+                                        csrf_validation_result.message = "CSRF token length is not matched..."
                                         resolve(csrf_validation_result)
                                     }
                                 }
@@ -65,7 +86,7 @@ module.exports = {
                     })
                 }
                 else {
-                    csrf_validation_result.message = "CSRF token is not matched..."
+                    csrf_validation_result.message = "CSRF token length is not matched..."
                     resolve(csrf_validation_result)
                 }
             }
