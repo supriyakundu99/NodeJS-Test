@@ -14,7 +14,7 @@ module.exports = {
                 res.json(data)
             }
             else {
-                res.json(data)
+                res.json({ "data": null })
             }
         })
     }
