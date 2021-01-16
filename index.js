@@ -1,9 +1,12 @@
 const express = require('express')
+var cors = require('cors')
+
 const rootRouter = require('./Router/root')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
 
 const app = express()
+app.use(cors())
 app.use(express.json())
 app.use(cookieParser())
 app.use(bodyParser())
