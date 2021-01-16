@@ -24,7 +24,7 @@ module.exports = {
             if (!err) {
                 if (rows.length == 0) {
                     resData.message = "No user found...."
-                    res.json(resData)
+                    res.status(400).json(resData)
                 }
                 else {
                     let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
@@ -59,26 +59,26 @@ module.exports = {
                                 resData.loginSuccess = true
                                 resData.message = "Login successfully done...."
                                 resData.sessionID = newSessionID
-                                res.json(resData)
+                                res.status(200).json(resData)
                             }
                             else {
                                 console.log(session_err)
                                 resData.message = session_err
-                                res.json(resData)
+                                res.status(500).json(resData)
                             }
                         })
                     }
                     else {
                         console.log("Password not matched..")
                         resData.message = "Password not matched..."
-                        res.json(resData)
+                        res.status(400).json(resData)
                     }
                 }
             }
             else {
                 console.log(err)
                 resData.message = err
-                res.json(resData)
+                res.status(500).json(resData)
             }
         })
     },
