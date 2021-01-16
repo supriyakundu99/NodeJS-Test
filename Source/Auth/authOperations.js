@@ -32,6 +32,9 @@ module.exports = {
                     if (encrpPassword === rows[0].password) {
                         // Removing old session
                         let oldCookie = req.cookies.sessionID
+                        if (req.headers.session_id != undefined) {
+                            oldCookie = req.headers.session_id
+                        }
                         console.log("-----Old Cookie: " + oldCookie)
                         if (oldCookie != undefined) {
                             let qString = 'DELETE FROM session WHERE (session_value = ?);'
