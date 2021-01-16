@@ -14,7 +14,8 @@ module.exports = {
         console.log("Login called...")
         let resData = {
             "loginSuccess": false,
-            "message": ""
+            "message": "",
+            "sessionID": null
         }
         let qString = 'SELECT * FROM auth_users where (user_name = ?);'
         let qUser = req.body.userName
@@ -22,17 +23,16 @@ module.exports = {
         connection.query(qString, [qUser], (err, rows, fields) => {
             if (!err) {
                 if (rows.length == 0) {
-                    console.log("Rows: ", rows)
                     resData.message = "No user found...."
                     res.json(resData)
                 }
                 else {
-                    console.log("Rows: " + rows)
                     let encrpPassword = crypto.createHash('sha1').update(req.body.password).digest('hex')
                     // let encrpPassword = crypto.createHash('sha1').update("1234").digest('hex')
                     if (encrpPassword === rows[0].password) {
                         // Removing old session
                         let oldCookie = req.cookies.sessionID
+                        console.log("-----Old Cookie: " + oldCookie)
                         if (oldCookie != undefined) {
                             let qString = 'DELETE FROM session WHERE (session_value = ?);'
                             connection.query(qString, [oldCookie], (del_err, del_rows, del_fields) => {
@@ -49,11 +49,13 @@ module.exports = {
                         // Creating new session
                         let qString = 'INSERT INTO session (`user_name`, `session_value`) VALUES (?, ?)'
                         newSessionID = uuid.v4()
+                        console.log("-----New Cookie: " + newSessionID)
                         connection.query(qString, [qUser, newSessionID], (session_err, session_rows, session_fields) => {
                             if (!session_err) {
                                 res.cookie('sessionID', newSessionID, { maxAge: 10 * 24 * 3600 * 1000 })
                                 resData.loginSuccess = true
                                 resData.message = "Login successfully done...."
+                                resData.sessionID = newSessionID
                                 res.json(resData)
                             }
                             else {
