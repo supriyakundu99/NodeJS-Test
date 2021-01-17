@@ -14,8 +14,7 @@ module.exports = {
         console.log("Login called...")
         let resData = {
             "loginSuccess": false,
-            "message": "",
-            "sessionID": null
+            "message": ""
         }
         let qString = 'SELECT * FROM auth_users where (user_name = ?);'
         let qUser = req.body.userName
@@ -59,7 +58,6 @@ module.exports = {
                                 res.setHeader('session_id', newSessionID)
                                 resData.loginSuccess = true
                                 resData.message = "Login successfully done...."
-                                resData.sessionID = newSessionID
                                 res.status(200).json(resData)
                             }
                             else {
