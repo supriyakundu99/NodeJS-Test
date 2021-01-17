@@ -56,6 +56,7 @@ module.exports = {
                         connection.query(qString, [qUser, newSessionID], (session_err, session_rows, session_fields) => {
                             if (!session_err) {
                                 res.cookie('sessionID', newSessionID, { maxAge: 10 * 24 * 3600 * 1000 })
+                                res.setHeader('session_id', newSessionID)
                                 resData.loginSuccess = true
                                 resData.message = "Login successfully done...."
                                 resData.sessionID = newSessionID
