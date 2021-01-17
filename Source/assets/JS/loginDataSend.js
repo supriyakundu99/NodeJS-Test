@@ -24,7 +24,9 @@ function doLogin() {
         },
         error: function (res) {
             console.log("Error...")
-            console.log(res);
+            console.log(res.responseJSON);
+            msgEle.setAttribute("style", "color: red;")
+            msgEle.innerHTML = res.responseJSON.message
         }
     });
 }
