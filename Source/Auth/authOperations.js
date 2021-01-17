@@ -143,6 +143,9 @@ module.exports = {
                 "userName": null
             }
             let sessionID = req.cookies.sessionID
+            if (req.headers.session_id != undefined) {
+                sessionID = req.headers.session_id
+            }
             if (sessionID != undefined) {
                 console.log(sessionID)
                 let qString = 'SELECT user_name FROM session WHERE (session_value = ?);'
