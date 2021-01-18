@@ -30,12 +30,12 @@ module.exports = {
                                     if (!err) {
                                         resobj.infoInsert = true
                                         resobj.message = "Info insertion success..."
-                                        res.json(resobj)
+                                        res.status(200).json(resobj)
                                     }
                                     else {
                                         console.log(err)
                                         resobj.message("Info insertion error...")
-                                        res.json(resobj)
+                                        res.status(500).json(resobj)
                                     }
                                 })
                             }
@@ -45,30 +45,30 @@ module.exports = {
                                     if (!err) {
                                         resobj.infoInsert = true
                                         resobj.message = "Info updation success..."
-                                        res.json(resobj)
+                                        res.status(200).json(resobj)
                                     }
                                     else {
                                         console.log(err)
                                         resobj.message("Info updation error...")
-                                        res.json(resobj)
+                                        res.status(500).json(resobj)
                                     }
                                 })
                             }
                         }
                         else {
                             resobj.message("Error in row count...")
-                            res.json(resobj)
+                            res.status(500).json(resobj)
                         }
                     })
                 }
                 else {
                     resobj.message("User not found....")
-                    res.json(resobj)
+                    res.status(400).json(resobj)
                 }
             }
             else {
                 resobj.message = "CSRF validation error..."
-                res.json(resobj)
+                res.status(400).json(resobj)
             }
         })
     }
