@@ -12,19 +12,12 @@ function doLogin() {
         success: (res) => {
             console.log("success.....")
             console.log(res)
-            if (res.loginSuccess) {
-                msgEle.setAttribute("style", "color: green;")
-                msgEle.innerHTML = res.message
-                location.replace('/')
-            }
-            else {
-                msgEle.setAttribute("style", "color: red;")
-                msgEle.innerHTML = res.message
-            }
+            msgEle.setAttribute("style", "color: green;")
+            msgEle.innerHTML = res.message
+            location.replace('/')
         },
         error: function (res) {
-            console.log("Error...")
-            console.log(res.responseJSON);
+            console.error(res.responseJSON);
             msgEle.setAttribute("style", "color: red;")
             msgEle.innerHTML = res.responseJSON.message
         }
