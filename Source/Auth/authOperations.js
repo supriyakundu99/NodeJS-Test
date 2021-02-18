@@ -107,31 +107,31 @@ module.exports = {
                                 console.log("User registered...")
                                 resData.registerSuccess = true
                                 resData.message = "User registered..."
-                                res.json(resData)
+                                res.status(200).json(resData)
                             }
                             else {
                                 console.log(err)
                                 resData.message = err
-                                res.json(resData)
+                                res.status(500).json(resData)
                             }
                         })
                     }
                     else {
                         console.log("User already exits..")
                         resData.message = "User already exists.."
-                        res.json(resData)
+                        res.status(400).json(resData)
                     }
                 }
                 else {
                     console.log(err)
                     resData.message = err
-                    res.json(resData)
+                    res.status(500).json(resData)
                 }
             })
         }
         else {
             resData.message = "Two passwords are not same.."
-            res.json(resData)
+            res.status(400).json(resData)
         }
     },
 
