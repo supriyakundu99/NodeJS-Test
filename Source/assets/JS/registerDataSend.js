@@ -11,7 +11,6 @@ function doRegister() {
             "cnfPassword": document.getElementById("cnfPassword").value
         },
         success: (res) => {
-            console.log("success.....");
             console.log(res)
             msgEle.setAttribute("style", "color: green;")
             msgEle.innerHTML = res.message
