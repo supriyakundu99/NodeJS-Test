@@ -13,19 +13,15 @@ function doRegister() {
         success: (res) => {
             console.log("success.....");
             console.log(res)
-            if (res.registerSuccess) {
-                msgEle.setAttribute("style", "color: green;")
-                msgEle.innerHTML = res.message
-                location.replace('/account/login')
-            }
-            else {
-                msgEle.setAttribute("style", "color: red;")
-                msgEle.innerHTML = res.message
-            }
+            msgEle.setAttribute("style", "color: green;")
+            msgEle.innerHTML = res.message
+            location.replace('/account/login')
+
         },
         error: function (res) {
-            console.log("Error...");
-            console.log(res);
+            console.error(res.responseJSON);
+            msgEle.setAttribute("style", "color: red;")
+            msgEle.innerHTML = res.responseJSON.message
         }
     });
 }
