@@ -10,7 +10,6 @@ function doLogin() {
             "password": document.getElementById("password").value
         },
         success: (res) => {
-            console.log("success.....")
             console.log(res)
             msgEle.setAttribute("style", "color: green;")
             msgEle.innerHTML = res.message
