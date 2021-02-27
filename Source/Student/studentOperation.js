@@ -25,7 +25,7 @@ module.exports = {
                     connection.query(qString, [qUser], (errCnt, rowsCnt, fieldsCnt) => {
                         if (!errCnt) {
                             if (rowsCnt[0].user_count == 0) {
-                                qString = 'INSERT INTO `studentdb`.`student_info` (`user_name`, `name`, `class`, `stream`) VALUES (?,?,?,?);'
+                                qString = 'INSERT INTO `student_info` (`user_name`, `name`, `class`, `stream`) VALUES (?,?,?,?);'
                                 connection.query(qString, [qUser, req.body.stuName, req.body.class, req.body.stream], (err, rows, fields) => {
                                     if (!err) {
                                         resobj.infoInsert = true
@@ -40,7 +40,7 @@ module.exports = {
                                 })
                             }
                             else {
-                                qString = 'UPDATE `studentdb`.`student_info` SET `name` = ?, `class` = ?, `stream` = ? WHERE (`user_name` = ?);'
+                                qString = 'UPDATE `student_info` SET `name` = ?, `class` = ?, `stream` = ? WHERE (`user_name` = ?);'
                                 connection.query(qString, [req.body.stuName, req.body.class, req.body.stream, qUser], (err, rows, fields) => {
                                     if (!err) {
                                         resobj.infoInsert = true
