@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+require('dotenv').config()
 
 const rootRouter = require('./Router/root')
 const cookieParser = require('cookie-parser')
@@ -20,7 +21,7 @@ app.use('/staticFiles', express.static(__dirname + '/Source/assets'))
 
 app.use('/', rootRouter)
 
-app.listen(8000, () => {
+app.listen(process.env.SERVER_PORT, () => {
     console.log("Server started.....")
-    console.log("Server URL: http://localhost:8000")
+    console.log("Server URL: http://localhost:" + process.env.SERVER_PORT)
 })
