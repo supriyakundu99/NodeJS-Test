@@ -21,7 +21,7 @@ app.use('/staticFiles', express.static(__dirname + '/Source/assets'))
 
 app.use('/', rootRouter)
 
-app.listen(process.env.SERVER_PORT, () => {
+app.listen(process.env.SERVER_PORT, process.env.SERVER_URL, () => {
     console.log("Server started.....")
-    console.log("Server URL: http://localhost:" + process.env.SERVER_PORT)
+    console.log("Server URL: http://" + process.env.SERVER_URL + ":" + process.env.SERVER_PORT)
 })
