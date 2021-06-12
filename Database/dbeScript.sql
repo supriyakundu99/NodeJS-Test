@@ -1,5 +1,5 @@
 DROP DATABASE if exists `student_db`;
-CREATE DATABASE `studentdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE `student_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 use `student_db`;
 CREATE TABLE `auth_users` (
   `users_id` int NOT NULL AUTO_INCREMENT,
